@@ -1,15 +1,21 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import axios from 'axios'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './App.css'
 
+import About from './components/About'
 import NavBar from './components/NavBar'
 import Users from './components/Users'
+import User from './components/User'
 import Search from './components/Search'
+import Alert from './components/Alert'
 
 class App extends Component {
 	state = {
 		users: [],
+		user: {},
 		loading: false,
+		alert: null,
 	}
 
 	// Could delete
@@ -34,15 +40,72 @@ class App extends Component {
 		this.setState({ users: response.data.items, loading: false })
 	}
 
+	// Get single user details
+	getUser = async (username) => {
+		this.setState({ loading: true })
+
+		const response = await axios.get(
+			`https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+		)
+
+		this.setState({ user: response.data, loading: false })
+	}
+
+	// Clear users from array
+	clearUsers = () => {
+		this.setState({ users: [], loading: false })
+	}
+
+	setAlert = (msg, type) => {
+		this.setState({
+			alert: {
+				msg,
+				type,
+			},
+		})
+		setTimeout(() => {
+			this.setState({ alert: null })
+		}, 5000)
+	}
+
 	render() {
+		const { users, loading, user } = this.state
+
 		return (
-			<div className='App'>
-				<NavBar />
-				<div className='container'>
-					<Search searchUsers={this.searchUsers} />
-					<Users loading={this.state.loading} users={this.state.users} />
+			<Router>
+				<div className='App'>
+					<NavBar />
+					<div className='container'>
+						<Alert alert={this.state.alert} />
+						<Switch>
+							<Route
+								exact
+								path='/'
+								render={(props) => {
+									return (
+										<Fragment>
+											<Search
+												searchUsers={this.searchUsers}
+												clearUsers={this.clearUsers}
+												showClear={users.length > 0 ? true : false}
+												setAlert={this.setAlert}
+											/>
+											<Users loading={loading} users={users} />
+										</Fragment>
+									)
+								}}
+							/>
+							<Route path='/about' component={About} />
+							<Route
+								path='/user/:login'
+								render={(props) => {
+									return <User user={user} getUser={this.getUser} {...props} />
+								}}
+							/>
+						</Switch>
+					</div>
 				</div>
-			</div>
+			</Router>
 		)
 	}
 }
