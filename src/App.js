@@ -52,6 +52,7 @@ class App extends Component {
 		this.setState({ user: response.data, loading: false })
 	}
 
+	// Gets the users repos
 	getUserRepos = async (username) => {
 		this.setState({ loading: true })
 
@@ -67,6 +68,8 @@ class App extends Component {
 		this.setState({ users: [], loading: false })
 	}
 
+	// If the onSubmit e.target doesn't have any text (in the Search comp) then this func gets called with the message and type 'light' for styling of the button
+	// Goes away after 5 seconds
 	setAlert = (msg, type) => {
 		this.setState({
 			alert: {
