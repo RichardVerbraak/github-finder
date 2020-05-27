@@ -1,14 +1,17 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useContext } from 'react'
 import Spinner from './Spinner'
 import Repos from './Repos'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import GithubContext from '../context/github/GithubContext'
 
-const User = ({ user, loading, repos, getUser, getUserRepos, match }) => {
+const User = ({ loading, repos, getUserRepos, match }) => {
+	const githubContext = useContext(GithubContext)
+
 	// Empty set of [] is mimicking componentDidMount (only running once)
 	// Because in the brackets you can specify when it should update for instance on repos like so : [repos]
 	useEffect(() => {
-		getUser(match.params.login)
+		githubContext.getUser(match.params.login)
 		getUserRepos(match.params.login)
 		// Removes the warning message about using dependecies in the brackets (no need since we only want it to run when mounted)
 		// eslint-disable-next-line
@@ -28,7 +31,7 @@ const User = ({ user, loading, repos, getUser, getUserRepos, match }) => {
 		public_repos,
 		public_gists,
 		hireable,
-	} = user
+	} = githubContext.user
 
 	if (loading) {
 		return <Spinner />
@@ -104,10 +107,8 @@ const User = ({ user, loading, repos, getUser, getUserRepos, match }) => {
 }
 
 User.propTypes = {
-	user: PropTypes.object.isRequired,
 	repos: PropTypes.array.isRequired,
 	loading: PropTypes.bool,
-	getUser: PropTypes.func.isRequired,
 	getUserRepos: PropTypes.func.isRequired,
 }
 

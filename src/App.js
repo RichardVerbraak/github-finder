@@ -12,23 +12,12 @@ import Alert from './components/Alert'
 import GithubState from './context/github/GithubState'
 
 const App = (props) => {
-	const [users, setUsers] = useState([])
 	const [user, setUser] = useState({})
 	const [repos, setRepos] = useState([])
 	const [loading, setLoading] = useState(false)
 	const [alert, setAlert] = useState(null)
 
 	// Get single user details
-	const getUser = async (username) => {
-		setLoading(true)
-
-		const response = await axios.get(
-			`https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-		)
-
-		setUser(response.data)
-		setLoading(false)
-	}
 
 	// Gets the users repos
 	const getUserRepos = async (username) => {
@@ -78,8 +67,6 @@ const App = (props) => {
 								render={(props) => {
 									return (
 										<User
-											user={user}
-											getUser={getUser}
 											getUserRepos={getUserRepos}
 											repos={repos}
 											{...props}

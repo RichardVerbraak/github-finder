@@ -26,6 +26,12 @@ export default (state, action) => {
 				users: [],
 				loading: false,
 			}
+		case GET_USER:
+			return {
+				...state,
+				user: action.payload,
+				loading: false,
+			}
 		default:
 			return state
 	}
