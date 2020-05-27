@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import GithubContext from '../context/github/GithubContext'
 import PropTypes from 'prop-types'
 
 // If you dont use arrow functions you have to bind 'this' to the method
 
-const Search = ({ showClear, clearUsers, searchUsers, setAlert }) => {
+const Search = ({ setAlert }) => {
+	const githubContext = useContext(GithubContext)
+	const { clearUsers, users } = githubContext
+
 	const [text, setText] = useState('')
 
 	// Use [e.target.name] instead of having multiple onChange functions if you would have multiple input fields like email or password
@@ -16,7 +20,7 @@ const Search = ({ showClear, clearUsers, searchUsers, setAlert }) => {
 		if (text === '') {
 			setAlert('Please enter something', 'light')
 		} else {
-			searchUsers(text)
+			githubContext.searchUsers(text)
 			setText('')
 		}
 	}
@@ -36,7 +40,7 @@ const Search = ({ showClear, clearUsers, searchUsers, setAlert }) => {
 					className='btn btn-dark btn-block'
 				/>
 			</form>
-			{showClear && (
+			{users.length > 0 && (
 				<button className='btn btn-light btn-block' onClick={clearUsers}>
 					Clear
 				</button>
@@ -46,9 +50,6 @@ const Search = ({ showClear, clearUsers, searchUsers, setAlert }) => {
 }
 
 Search.propTypes = {
-	searchUsers: PropTypes.func.isRequired,
-	clearUsers: PropTypes.func.isRequired,
-	showClear: PropTypes.bool.isRequired,
 	setAlert: PropTypes.func.isRequired,
 }
 
