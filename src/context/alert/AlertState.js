@@ -20,7 +20,7 @@ const AlertState = (props) => {
 				style,
 			},
 		})
-		setTimeout(() => dispatch({ type: REMOVE_ALERT, alert: null }), 5000)
+		setTimeout(() => dispatch({ type: REMOVE_ALERT, payload: null }), 5000)
 	}
 
 	return (

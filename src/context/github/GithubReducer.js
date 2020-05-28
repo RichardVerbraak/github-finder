@@ -3,9 +3,11 @@ import {
 	SET_LOADING,
 	CLEAR_USERS,
 	GET_REPOS,
-	SET_ALERT,
 	GET_USER,
 } from '../../types'
+
+// Useful console.log to have when creating actions and reducers
+// console.log(`Dispatched: ${action.type} Payload:`, action.payload)
 
 export default (state, action) => {
 	switch (action.type) {
@@ -15,6 +17,7 @@ export default (state, action) => {
 				loading: true,
 			}
 		case SEARCH_USERS:
+			// console.log(`Dispatched: ${action.type} Payload:`, action.payload)
 			return {
 				...state,
 				users: action.payload,
