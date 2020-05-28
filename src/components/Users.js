@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import PropTypes from 'prop-types'
 import Spinner from './Spinner'
 import UserItem from './UserItem'
 import GithubContext from '../context/github/GithubContext'
