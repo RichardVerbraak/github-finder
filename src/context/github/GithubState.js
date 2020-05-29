@@ -14,6 +14,17 @@ import {
 	GET_USER,
 } from '../../types'
 
+let githubClientId
+let githubClientSecret
+
+if (process.env.NODE_ENV !== 'production') {
+	githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID
+	githubClientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET
+} else {
+	githubClientId = process.env.GITHUB_CLIENT_ID
+	githubClientSecret = process.env.GITHUB_CLIENT_SECRET
+}
+
 // GithubState is where the state lives and will wrap the entire App so you have access to state in every component when you use - useContext
 
 const GithubState = (props) => {
@@ -31,7 +42,7 @@ const GithubState = (props) => {
 		setLoading()
 
 		const response = await axios.get(
-			`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+			`https://api.github.com/search/users?q=${text}&client_id=${githubClientId}&client_secret=${githubClientSecret}`
 		)
 
 		dispatch({
@@ -45,7 +56,7 @@ const GithubState = (props) => {
 		setLoading()
 
 		const response = await axios.get(
-			`https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+			`https://api.github.com/users/${username}?client_id=${githubClientId}&client_secret=${githubClientSecret}`
 		)
 
 		dispatch({
@@ -59,7 +70,7 @@ const GithubState = (props) => {
 		setLoading()
 
 		const response = await axios.get(
-			`https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+			`https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${githubClientId}&client_secret=${githubClientSecret}`
 		)
 
 		console.log(response.data)
